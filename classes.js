@@ -1,4 +1,4 @@
-/* 
+/*
   Once you complete a problem, refresh ./classes.html in your browser and check to see if the problem's test(s) are passing.
   Passed tests will be indicated by a green circle.
   Failed tests will be indicated by a red X.
@@ -29,8 +29,17 @@
   Call your class Employee and receive all the data in the constructor in the order listed above.
 */
 
-//Code Here
-
+class Employee {
+  constructor(firstName, lastName, email, age) {
+    this.first_name = firstName;
+    this.last_name = lastName;
+    this.email = email;
+    this.age = age;
+  }
+  makeWidget() {
+    return `${this.first_name} ${this.last_name} Widget`;
+  }
+}
 
 ////////// PROBLEM 2 //////////
 
@@ -47,8 +56,18 @@
   Call your new class Manager
 */
 
-//Code Here
-
+class Manager extends Employee {
+  constructor(firstName, lastName, email, age) {
+    super(firstName, lastName, email, age);
+    this.reports = [];
+  }
+  hire(employee) {
+    this.reports.push(employee);
+  }
+  fire(index) {
+    this.reports.splice(index, 1);
+  }
+}
 
 ////////// PROBLEM 3 //////////
 
@@ -71,9 +90,38 @@
   Call your new class ProgressiveManager
 */
 
-//Code Here
-
-
+class ProgressiveManager extends Manager {
+  constructor(firstName, lastName, email, age) {
+    super(firstName, lastName, email, age);
+    this.title = "Not a manager";
+    this.bonus = 0;
+  }
+  hire(employee) {
+    super.hire(employee);
+    this.updateTitle();
+  }
+  fire(index) {
+    super.fire(index);
+    this.bonus += 100;
+    this.updateTitle();
+  }
+  updateTitle() {
+    let len = this.reports.length;
+    if (len === 0) {
+      this.title = "Not a manager";
+    } else if (len >= 1 && len <= 3) {
+      this.title = "Barely Manager";
+    } else if (len >= 4 && len <= 10) {
+      this.title = "Mostly Manager";
+    } else if (len >= 11 && len <= 50) {
+      this.title = "Manager";
+    } else if (len >= 51 && len <= 100) {
+      this.title = "Manager Plus";
+    } else {
+      this.title = "Bestest Manager";
+    }
+  }
+}
 
 ////////// PROBLEM 4 - Black Diamond //////////
 
@@ -98,6 +146,23 @@
         - The anonymous function should decrease wear_and_tear_count by 10, and set needs_reboot to false
 */
 
-//Code Here
-
-
+class Machine {
+  constructor() {
+    this.widgets_made_count = 0;
+    this.wear_and_tear_count = 0;
+    this.needs_reboot = false;
+  }
+  makeWidgets(num) {
+    this.widgets_made_count += num;
+    this.wear_and_tear_count += Math.floor(num / 50);
+  }
+  fixMachine() {
+    this.needs_reboot = true;
+  }
+  reboot() {
+    return function () {
+      this.wear_and_tear_count -= 10;
+      this.needs_reboot = false;
+    }.bind(this);
+  }
+}
